@@ -16,8 +16,6 @@
         </div>
     </div>
 
-
-
     <div class="mt-6">
         <x-display-panel>
             <div>
@@ -29,12 +27,10 @@
             </div>
         </x-display-panel>
     </div>
+    
     <div class="my-10">
         <x-display-panel>
             This is a line
         </x-display-panel>
     </div>
-
-
-
 </x-app-layout>

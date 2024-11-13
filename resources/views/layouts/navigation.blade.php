@@ -21,26 +21,26 @@
                         {{ __('test') }}
                     </x-nav-link>
                 </div>
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('test2')" :active="request()->routeIs('test2')">
-                        {{ __('Income') }}
-                    </x-nav-link>
-                </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('test2')" :active="request()->routeIs('test2')">
+                    <x-nav-link :href="route('test')" :active="request()->routeIs('test')">
                         {{ __('Fund') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('test2')" :active="request()->routeIs('test2')">
-                        {{ __('Query') }}
+                    <x-nav-link :href="route('test')" :active="request()->routeIs('test')">
+                        {{ __('Expense') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('test2')" :active="request()->routeIs('test2')">
-                        {{ __('Report') }}
+                    <x-nav-link :href="route('test')" :active="request()->routeIs('test')">
+                        {{ __('Income') }}
                     </x-nav-link>
-                </div> --}}
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('test')" :active="request()->routeIs('test')">
+                        {{ __('Query') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

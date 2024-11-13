@@ -65,6 +65,6 @@ class FundController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return view('fund.destroy');
     }
 }
