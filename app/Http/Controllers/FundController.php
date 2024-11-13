@@ -11,7 +11,7 @@ class FundController extends Controller
      */
     public function index()
     {
-        return view('fund.index');
+
     }
 
     /**
@@ -19,7 +19,8 @@ class FundController extends Controller
      */
     public function create()
     {
-        return view('fund.create');
+        $html = view('fund.create')->render();
+        return response($html);
     }
 
     /**
