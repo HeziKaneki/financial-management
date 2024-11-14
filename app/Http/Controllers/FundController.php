@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fund;
+use App\Models\Monthly;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use App\Exceptions\CustomException;
 
 class FundController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
+        if ($request->query('get') == 'comp') {
+            // $html = view('fund.index')->render();
+            // return response($html);
+            return view('fund.index');
+        } else {
+            return view('fund.fund');
+        }
     }
 
     /**
@@ -28,14 +38,29 @@ class FundController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string',
-            'is_freemoney' => 'required|boolean',
+            'monthly' => 'required|integer',
         ]);
-        $validated['user_id'] = $request->session()->get('user_id');        
-
+    
+        $fund = new Fund();
+        $fund->name = $validatedData['name'];
+        $user_id = auth()->id();
+        if ($user_id == null) {
+            throw new CustomException(session()->get('user_id'), 400);
+        } else {
+            $fund->user_id = $user_id;
+        }
+        $fund->save();
+    
+        $monthly = new Monthly();
+        $monthly->amount = $validatedData['monthly'];
+        $monthly->fund_id = $fund->id;
+        $monthly->save();
+    
         // Response
     }
+    
 
     /**
      * Display the specified resource.

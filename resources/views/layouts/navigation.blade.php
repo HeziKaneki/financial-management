@@ -21,12 +21,12 @@
                         {{ __('test') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('test')" :active="request()->routeIs('test')">
-                        {{ __('Fund') }}
+                        {{ __('Test') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                </div> --}}
+                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('test')" :active="request()->routeIs('test')">
                         {{ __('Expense') }}
                     </x-nav-link>
@@ -40,7 +40,7 @@
                     <x-nav-link :href="route('test')" :active="request()->routeIs('test')">
                         {{ __('Query') }}
                     </x-nav-link>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Settings Dropdown -->

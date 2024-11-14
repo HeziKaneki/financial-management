@@ -1,14 +1,14 @@
 <x-app-layout>
     <!-- Header -->
     <x-slot name="header">
-        {{ __('Testing Page') }}
+        {{ __('Fund') }}
     </x-slot>
 
     <!-- Navigation Links -->
     <div class="mt-6">
         <div class="flex justify-center">
             <div class="mr-4">
-                <x-nav-link class="cursor-pointer">
+                <x-nav-link class="cursor-pointer" :active="true" onclick="changeComponent('{{ route('fund.index', ['get' => 'comp']) }}')">
                     INDEX
                 </x-nav-link>
             </div>
@@ -16,21 +16,6 @@
                 <!-- Truyền URL động vào JavaScript -->
                 <x-nav-link class="cursor-pointer" :active="true" onclick="changeComponent('{{ route('fund.create') }}')">
                     CREATE
-                </x-nav-link>
-            </div>
-            <div class="mr-4">
-                <x-nav-link class="cursor-pointer" onclick="changeComponent()">
-                    EDIT
-                </x-nav-link>
-            </div>
-            <div class="mr-4">
-                <x-nav-link class="cursor-pointer">
-                    DELETE
-                </x-nav-link>
-            </div>
-            <div class="mr-4">
-                <x-nav-link class="cursor-pointer">
-                    SHOW
                 </x-nav-link>
             </div>
         </div>
@@ -70,7 +55,6 @@
                 .catch(error => {
                     console.error('Error fetching the HTML:', error);
                 });
-            
         }
     </script>
 </x-app-layout>
