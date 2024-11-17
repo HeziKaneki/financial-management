@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Fund;
 use App\Models\Monthly;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use App\Exceptions\CustomException;
 
 class FundController extends Controller
 {
@@ -16,9 +14,8 @@ class FundController extends Controller
     public function index(Request $request)
     {
         if ($request->query('get') == 'comp') {
-            // $html = view('fund.index')->render();
-            // return response($html);
-            return view('fund.index');
+            $html = view('fund.index')->render();
+            return response($html);
         } else {
             return view('fund.fund');
         }
@@ -29,8 +26,7 @@ class FundController extends Controller
      */
     public function create()
     {
-        $html = view('fund.create')->render();
-        return response($html);
+        return view('fund.create');
     }
 
     /**

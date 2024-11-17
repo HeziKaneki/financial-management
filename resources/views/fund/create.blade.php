@@ -21,46 +21,36 @@
             <!-- Submit Button -->
             <div class="flex justify-end">
                 <input type="submit" value="Submit" class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700">
-                </input>
             </div>
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
         </form>
     </x-display-panel>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('fundForm');
+    $(document).ready(function() {
+        $('#fundForm').submit(function(event) {
+            event.preventDefault();  // Ngừng việc gửi form mặc định
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Ngừng hành động mặc định (reload trang)
+            console.log('Form submitted via AJAX'); // Kiểm tra sự kiện submit
 
-            // Lấy dữ liệu từ form
-            const formData = new FormData(form);
+            var formAction = $(this).attr('action');
+            var formData = $(this).serialize();
 
-            // Lấy CSRF token từ meta tag (nếu có)
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            // Gửi dữ liệu bằng fetch API
-            fetch('/funds/store', {
+            // Gửi dữ liệu qua AJAX
+            $.ajax({
+                url: formAction,
                 method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken, // Gửi CSRF token
-                    'Accept': 'application/json', // Đảm bảo server trả về JSON
+                data: formData,
+                success: function(response) {
+                    alert('success');
+
+                    // Clear form sau khi gửi thành công
+                    $('#fundForm')[0].reset(); // Reset tất cả các input trong form
                 },
-                body: formData // Dữ liệu gửi đi dưới dạng FormData
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Nếu phản hồi thành công, reset lại form
-                    form.reset();
-                } else {
-                    console.error('Lỗi xảy ra trong quá trình gửi');
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
                 }
-            })
-            .catch(error => {
-                // Xử lý khi có lỗi
-                console.error('Error:', error);
-                alert('Có lỗi xảy ra!');
             });
         });
     });

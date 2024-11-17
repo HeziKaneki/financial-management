@@ -1,24 +1,25 @@
 <x-app-layout>
-
     <!-- Navigation Links -->
     <div class="mt-6">
         <div class="flex justify-center">
             <div class="mr-4">
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('fund.index', ['get' => 'comp']) }}')">
+                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('expense.index', ['get' => 'comp']) }}')">
                     INDEX
                 </x-nav-link>
             </div>
             <div class="mr-4">
-                <!-- Truyền URL động vào JavaScript -->
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('fund.create') }}')">
+                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('expense.create') }}')">
                     CREATE
                 </x-nav-link>
             </div>
         </div>
     </div>
 
-    <!-- Display Panel -->
+    <!-- Display Panel with Loading Indicator -->
     <div id="displayPanel" class="mt-6 transition-opacity duration-300 opacity-100">
+        <div id="loadingIndicator" class="hidden text-center dark:text-white">
+            Loading...
+        </div>
     </div>
 
     <!-- Change Component Script -->
@@ -26,7 +27,8 @@
         function changeComponent(url) {
             const csrfToken = $('meta[name="csrf-token"]').attr('content');
             
-            // Ẩn thẻ trước khi tải
+            // Hiển thị thông báo loading
+            $('#loadingIndicator').removeClass('hidden');
             $('#displayPanel').removeClass('opacity-100').addClass('opacity-0');
 
             $.ajax({
@@ -38,11 +40,13 @@
                 success: function (response) {
                     setTimeout(() => {
                         $('#displayPanel').html(response);
-                        $('#displayPanel').removeClass('opacity-0').addClass('opacity-100'); // Hiện lại thẻ khi tải xong
+                        $('#loadingIndicator').addClass('hidden');
+                        $('#displayPanel').removeClass('opacity-0').addClass('opacity-100');
                     }, 300); // Đợi hiệu ứng CSS hoàn tất
                 },
                 error: function (xhr) {
                     console.error('Error:', xhr.responseText);
+                    $('#loadingIndicator').addClass('hidden');
                 }
             });
         }

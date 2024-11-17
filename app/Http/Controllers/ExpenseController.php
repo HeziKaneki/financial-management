@@ -2,106 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
+use App\Models\Fund;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
     /**
-     * Display the expenses list view.
-     *
-     * @return \Illuminate\View\View
+     * Display a listing of the resource.
      */
-    public function index() {
-        return view('expense.index');
+    public function index(Request $request)
+    {
+        if ($request->query('get') == 'comp') {
+            $html = view('expense.index')->render();
+            return response($html);
+        } else {
+            return view('expense.expense');
+        }
     }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $sourceFunds = Fund::where('user_id', auth()->id())->where('is_freemoney', 0)->get();
+        return view('expense.create', compact('sourceFunds'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $expense = new Transaction();
+        $expense->user_id = auth()->id();
+        $validatedData = $request->validate([
+            'source' => 'required|string',
+            'amount' => 'required|integer',
+        ]);
+        $expense->amount = $validatedData['amount'];
+        $expense->type = 'expense';
+        $expense->source = $validatedData['source'];
+        $expense->save();
     
-    /**
-     * Display the expense creation view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create(): View {
-        return view('expense.create');
+        Fund::where('id', $validatedData['source'])->decrement('balance', $validatedData['amount']);
     }
 
     /**
-     * Store a newly created expense in the database.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     * 
-     * @throws \Illuminate\Validation\ValidationException
+     * Display the specified resource.
      */
-    public function store(Request $request) {
-        $validated = $request->validate([
-            'amount' => 'required|integer',
-            'type' => 'required|string',
-            'source' => 'required|string'
-        ]);
-        $validated['user_id'] = $request->session()->get('user_id');
-
-        Transaction::create($validated);
-
-        // Response
+    public function show(string $id)
+    {
+        //
     }
 
     /**
-     * Remove the specified expense from the database.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Show the form for editing the specified resource.
      */
-    public function destroy(Request $request) {
-        $request->validate([
-            'id' => 'required|integer'
-        ]);
-
-        $transaction = Transaction::find($request->input('id'));
-        $transaction->delete();
-
-        // Response
+    public function edit(string $id)
+    {
+        //
     }
 
     /**
-     * Display the expense edit view.
-     *
-     * @return \Illuminate\View\View
+     * Update the specified resource in storage.
      */
-    public function edit() {
-        return view('expense.edit');
+    public function update(Request $request, string $id)
+    {
+        //
     }
 
     /**
-     * Update the specified expense in the database.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Remove the specified resource from storage.
      */
-    public function update(Request $request) {
-        $validated = $request->validate([
-            'amount' => 'required|integer',
-            'type' => 'required|string',
-            'source' => 'required|string'
-        ]);
-
-        $transaction = Transaction::find($request->input('id'));
-        $transaction->update($validated);
-
-        // Response
-    }
-
-    /**
-     * Display the expense show view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show() {
-        return view('expense.show');
+    public function destroy(string $id)
+    {
+        //
     }
 }

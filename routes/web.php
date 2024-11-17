@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('', function () {
     return view('welcome');
@@ -23,5 +24,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('fund', FundController::class)->middleware(['auth', 'verified']);
+Route::resource('expense', ExpenseController::class)->middleware(['auth', 'verified']);
+
 
 require __DIR__.'/auth.php';

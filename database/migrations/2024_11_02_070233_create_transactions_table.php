@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('users_id')->constrained()->cascadeOnDelete();
             $table->integer('amount');
             $table->enum('type', ['income', 'expense', 'allocate', 'auto']);
-            $table->foreignId('source')->constrained('funds')->cascadeOnDelete()->nullable();
-            $table->foreignId('destination')->constrained('funds')->cascadeOnDelete()->nullable();
+            $table->foreignId('source')->nullable()->constrained('funds')->cascadeOnDelete();
+            $table->foreignId('destination')->nullable()->constrained('funds')->cascadeOnDelete();
             $table->timestamps();
         });
     }

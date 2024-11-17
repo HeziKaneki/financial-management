@@ -1,8 +1,8 @@
 <x-app-layout>
     <!-- Header -->
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         {{ __('Testing Page') }}
-    </x-slot>
+    </x-slot> --}}
 
     <!-- Navigation Links -->
     <div class="mt-6">
