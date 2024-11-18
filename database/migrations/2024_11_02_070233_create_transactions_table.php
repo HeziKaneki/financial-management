@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('amount');
             $table->enum('type', ['income', 'expense', 'allocate', 'auto']);
             $table->foreignId('source')->nullable()->constrained('funds')->cascadeOnDelete();

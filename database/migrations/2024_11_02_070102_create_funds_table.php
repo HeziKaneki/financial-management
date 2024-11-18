@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('funds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('balance')->default(0);
             $table->boolean('is_freemoney')->default(false);
             $table->timestamps();

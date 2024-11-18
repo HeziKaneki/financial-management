@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('funds', function (Blueprint $table) {
-            $table->decimal('balance', 20, 0)->change();  // Thay đổi kiểu dữ liệu cột balance thành DECIMAL(20, 0)
+            $table->decimal('balance', 20, 0)->default(0)->change();  // Thay đổi kiểu dữ liệu cột balance thành DECIMAL(20, 0)
         });
     }
 
