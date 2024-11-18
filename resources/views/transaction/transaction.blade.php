@@ -3,13 +3,23 @@
     <div class="mt-6">
         <div class="flex justify-center">
             <div class="mr-4">
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('expense.index', ['get' => 'comp']) }}')">
+                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.index') }}')">
                     INDEX
                 </x-nav-link>
             </div>
             <div class="mr-4">
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('expense.create') }}')">
-                    CREATE
+                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.expense.create') }}')">
+                    ADD EXPENSE
+                </x-nav-link>
+            </div>
+            <div class="mr-4">
+                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.income.create') }}')">
+                    ADD INCOME
+                </x-nav-link>
+            </div>
+            <div class="mr-4">
+                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.allocate.create') }}')">
+                    ALLOCATE FUND
                 </x-nav-link>
             </div>
         </div>
