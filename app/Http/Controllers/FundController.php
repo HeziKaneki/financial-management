@@ -13,12 +13,7 @@ class FundController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->query('get') == 'comp') {
-            $html = view('fund.index')->render();
-            return response($html);
-        } else {
-            return view('fund.fund');
-        }
+        return view('fund.index');
     }
 
     /**

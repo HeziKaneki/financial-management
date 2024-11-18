@@ -2,23 +2,23 @@
     <!-- Navigation Links -->
     <div class="mt-6">
         <div class="flex justify-center">
-            <div class="mr-4">
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.index') }}')">
+            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <x-nav-link :href="route('transaction.index')" :active="request()->routeIs('transaction.index')">
                     INDEX
                 </x-nav-link>
             </div>
-            <div class="mr-4">
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.expense.create') }}')">
+            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <x-nav-link :href="route('transaction.create.expense')" :active="request()->routeIs('transaction.create.expense')">
                     ADD EXPENSE
                 </x-nav-link>
             </div>
-            <div class="mr-4">
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.income.create') }}')">
+            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <x-nav-link :href="route('transaction.create.income')" :active="request()->routeIs('transaction.create.income')">
                     ADD INCOME
                 </x-nav-link>
             </div>
-            <div class="mr-4">
-                <x-nav-link class="cursor-pointer" :active="false" onclick="changeComponent('{{ route('transaction.allocate.create') }}')">
+            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <x-nav-link :href="route('transaction.create.allocate')" :active="request()->routeIs('transaction.create.allocate')">
                     ALLOCATE FUND
                 </x-nav-link>
             </div>

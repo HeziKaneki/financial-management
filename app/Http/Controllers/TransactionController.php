@@ -12,8 +12,18 @@ class TransactionController extends Controller
         return view('transaction.transaction');
     }
 
-    public function index() {
-        return view('transaction.index');
+    public function index(Request $request) {
+        // Lấy từ input tìm kiếm
+        $search = $request->input('search');
+
+        // Truy vấn các giao dịch và phân trang
+        $transactions = Transaction::when($search, function($query, $search) {
+            return $query->where('id', 'like', "%$search%")
+                        ->orWhere('type', 'like', "%$search%")
+                        ->orWhere('amount', 'like', "%$search%");
+        })->paginate(10);  // Phân trang 10 giao dịch mỗi trang
+
+        return view('transaction.index', compact('transactions'));
     }
 
     public function show($id) {
@@ -47,8 +57,21 @@ class TransactionController extends Controller
         $expense->amount = $validatedData['amount'];
         $expense->type = 'expense';
         $expense->source = $validatedData['source'];
+
+        if ($validatedData['amount'] > Fund::where('id', $validatedData['source'])->first()->balance) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'not enough money',
+            ]);
+        } else {
+            $expense->save();
+            Fund::where('id', $validatedData['source'])->decrement('balance', $validatedData['amount']);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'success',
+            ]);
+        }    
         $expense->save();
-    
         Fund::where('id', $validatedData['source'])->decrement('balance', $validatedData['amount']);
     }
     public function incomeCreate() {
@@ -63,7 +86,6 @@ class TransactionController extends Controller
         $income->amount = $validatedData['amount'];
         $income->type = 'income';
         $income->save();
-
         Fund::where('user_id', auth()->id())->where('is_freemoney', 1)->increment('balance', $validatedData['amount']);
     }
     public function allocateCreate() {
@@ -80,9 +102,20 @@ class TransactionController extends Controller
         $allocate->amount = $validatedData['amount'];
         $allocate->type = 'allocate';
         $allocate->destination = $validatedData['destination'];
-        $allocate->save();
     
-        Fund::where('user_id', auth()->id())->where('is_freemoney', 1)->decrement('balance', $validatedData['amount']);
-        Fund::where('id', $validatedData['destination'])->increment('balance', $validatedData['amount']);
+        if ($validatedData['amount'] > Fund::where('user_id', auth()->id())->where('is_freemoney', 1)->first()->balance) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'not enough money',
+            ]);
+        } else {
+            $allocate->save();
+            Fund::where('user_id', auth()->id())->where('is_freemoney', 1)->decrement('balance', $validatedData['amount']);
+            Fund::where('id', $validatedData['destination'])->increment('balance', $validatedData['amount']);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'success',
+            ]);
+        }
     }
 }

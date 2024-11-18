@@ -26,25 +26,20 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('fund', FundController::class)->middleware(['auth', 'verified']);
 
-// Main View
-Route::get('/transaction-main', [TransactionController::class, 'transaction'])->name('transaction.main');
+Route::prefix('transaction')->name('transaction.')->middleware(['auth', 'verified'])->group(function () {
+    // Create
+    Route::get('create/expense', [TransactionController::class, 'expenseCreate'])->name('create.expense');
+    Route::get('create/income', [TransactionController::class, 'incomeCreate'])->name('create.income');
+    Route::get('create/allocate', [TransactionController::class, 'allocateCreate'])->name('create.allocate');
+
+    // Store
+    Route::post('store/expense', [TransactionController::class, 'expenseStore'])->name('store.expense');
+    Route::post('store/income', [TransactionController::class, 'incomeStore'])->name('store.income');
+    Route::post('store/allocate', [TransactionController::class, 'allocateStore'])->name('store.allocate');
+});
 
 // Resource for index, edit, update, show, destroy
 Route::resource('transaction', TransactionController::class)->middleware(['auth', 'verified']);
-
-Route::prefix('transaction')->name('transaction.')->middleware(['auth', 'verified'])->group(function () {
-    // Expense
-    Route::get('/expense/create', [TransactionController::class, 'expenseCreate'])->name('expense.create');
-    Route::post('/expense', [TransactionController::class, 'expenseStore'])->name('expense.store');
-
-    // Income
-    Route::get('/income/create', [TransactionController::class, 'incomeCreate'])->name('income.create');
-    Route::post('/income', [TransactionController::class, 'incomeStore'])->name('income.store');
-
-    // Allocate
-    Route::get('/allocate/create', [TransactionController::class, 'allocateCreate'])->name('allocate.create');
-    Route::post('/allocate', [TransactionController::class, 'allocateStore'])->name('allocate.store');
-});
 
 // Route::get('/transaction/index', [TransactionController::class, 'index'])->name('transaction.index');
 // Route::get('/transaction/{id}/show', [TransactionController::class, 'show'])->name('transaction.show');
