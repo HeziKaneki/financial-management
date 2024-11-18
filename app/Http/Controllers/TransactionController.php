@@ -14,16 +14,23 @@ class TransactionController extends Controller
 
     public function index(Request $request) {
         // Lấy từ input tìm kiếm
-        $search = $request->input('search');
+        $search = $request->input('search', '');
 
         // Truy vấn các giao dịch và phân trang
         $transactions = Transaction::when($search, function($query, $search) {
             return $query->where('id', 'like', "%$search%")
                         ->orWhere('type', 'like', "%$search%")
                         ->orWhere('amount', 'like', "%$search%");
-        })->paginate(10);  // Phân trang 10 giao dịch mỗi trang
+        })->paginate(20); // Phân trang 20 giao dịch mỗi trang
 
-        return view('transaction.index', compact('transactions'));
+        // Thêm thông tin source_name và destination_name cho từng giao dịch
+        foreach ($transactions as $transaction) {
+            $transaction->source_name = Fund::where('id', $transaction->source)->first()->name ?? '';
+            $transaction->destination_name = Fund::where('id', $transaction->destination)->first()->name ?? '';
+        }
+
+        // Trả về view với các giao dịch đã được thêm thông tin
+        return view('transaction.index', compact('transactions', 'search'));
     }
 
     public function show($id) {
