@@ -8,46 +8,78 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function transaction() {
-        return view('transaction.transaction');
-    }
-
     public function index(Request $request) {
-        // Lấy từ input tìm kiếm
         $search = $request->input('search', '');
 
-        // Truy vấn các giao dịch và phân trang
-        $transactions = Transaction::when($search, function($query, $search) {
-            return $query->where('id', 'like', "%$search%")
-                        ->orWhere('type', 'like', "%$search%")
-                        ->orWhere('amount', 'like', "%$search%");
-        })->paginate(20); // Phân trang 20 giao dịch mỗi trang
+        $transactions = Transaction::where('user_id', auth()->id())->orderBy('created_at', 'desc')->when($search, function($query, $search) {
+            return $query
+                ->where('id', 'like', "%$search%")
+                ->orWhere('type', 'like', "%$search%")
+                ->orWhere('amount', 'like', "%$search%");
+        })->paginate(20);
 
-        // Thêm thông tin source_name và destination_name cho từng giao dịch
+        // Bởi source và destination của transaction chỉ là các id, cần truy vấn tên source và destination
         foreach ($transactions as $transaction) {
             $transaction->source_name = Fund::where('id', $transaction->source)->first()->name ?? '';
             $transaction->destination_name = Fund::where('id', $transaction->destination)->first()->name ?? '';
         }
 
-        // Trả về view với các giao dịch đã được thêm thông tin
         return view('transaction.index', compact('transactions', 'search'));
     }
 
     public function show($id) {
-        return view('transaction.show');
+        //
     }
 
     public function edit($id) {
+        //
+    }
+
+    public function update(Request $request, $id) {
+        //
+    }
+
+    public function destroy($id) {
         $transaction = Transaction::find($id);
-        return view('transaction.edit', compact($transaction));
-    }
-
-    public function update() {
-        //
-    }
-
-    public function destroy() {
-        //
+        if ($transaction->type == 'expense') {
+            Fund::where('id', $transaction->source)->increment('balance', $transaction->amount);
+            $transaction->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'success',
+            ]);
+        } else if ($transaction->type == 'income') {
+            $freemoneyBalance = Fund::where('user_id', auth()->id())->where('is_freemoney', 1)->first()->balance;
+            if ($transaction->amount > $freemoneyBalance) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "freemoney don't have enough money to restore",
+                ]);
+            } else {
+                Fund::where('user_id', auth()->id())->where('is_freemoney', 1)->decrement('balance', $transaction->amount);
+                $transaction->delete();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'success',
+                ]);
+            }
+        } else if ($transaction->type == 'allocate') {
+            $destinationFundBalance = Fund::where('id', $transaction->destination)->first()->balance;
+            if ($transaction->amount > $destinationFundBalance) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "source fund don't have enough money to restore",
+                ]);
+            } else {
+                Fund::where('id', $transaction->destination)->decrement('balance', $transaction->amount);
+                Fund::where('user_id', auth()->id())->where('is_freemoney', 1)->increment('balance', $transaction->amount);
+                $transaction->delete();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'success',
+                ]);
+            }
+        }
     }
 
     public function expenseCreate() {

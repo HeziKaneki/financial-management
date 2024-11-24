@@ -29,7 +29,7 @@
                 </x-nav-link>
             </div>
             <div class="mr-4">
-                <x-nav-link class="cursor-pointer">
+                <x-nav-link class="cursor-pointer" :href="route('test.show', 100)">
                     SHOW
                 </x-nav-link>
             </div>
