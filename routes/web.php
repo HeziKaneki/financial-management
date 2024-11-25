@@ -38,7 +38,6 @@ Route::prefix('transaction')->name('transaction.')->middleware(['auth', 'verifie
     Route::post('store/allocate', [TransactionController::class, 'allocateStore'])->name('store.allocate');
 });
 
-// Resource for index, edit, update, show, destroy
 Route::resource('transaction', TransactionController::class)->middleware(['auth', 'verified']);
 
 Route::resource('category', CategoryController::class)->middleware(['auth', 'verified']);

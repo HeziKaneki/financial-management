@@ -17,6 +17,6 @@ class Transaction extends Model
     }
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'transaction_category');
+        return $this->belongsToMany(Category::class, 'transaction_category', 'transaction_id', 'category_id');
     }
 }

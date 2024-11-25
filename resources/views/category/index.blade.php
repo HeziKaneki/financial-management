@@ -59,3 +59,37 @@
         </x-display-panel>
     </div>
 </x-category-nav-bar>
+
+<script>
+    $(document).ready(function () {
+        $('.deleteForm').on('submit', function (e) {
+            e.preventDefault();
+            
+            var formData = new FormData(this);
+            formData.append('_method', 'DELETE');
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+            var row = $(this).closest('tr');
+            var categoryId = row.attr('id');
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.status == 'success') {
+                        $('#' + categoryId).remove();
+                        alert(response.message);
+                    } else {
+                        alert(response.message)
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred: ' + error);
+                }
+            })
+        })
+    });
+</script>

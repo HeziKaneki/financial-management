@@ -26,6 +26,23 @@
                     <input type="number" id="amount" name="amount" value="0" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                 </div>
 
+                <!-- categories -->
+                <div class="mb-4">
+                    <label for="categories" class="block text-lg font-medium text-gray-700 dark:text-gray-300">Categories:</label>
+                    <select id="categories" name="categories" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <option value="">-- Select Categories --</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                    <label for="description" class="block text-lg font-medium text-gray-700 dark:text-gray-300">Description:</label>
+                    <input type="text" id="description" name="description" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+
                 <!-- Submit Button -->
                 <div class="flex justify-end">
                     <input type="submit" value="Submit" class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700">
