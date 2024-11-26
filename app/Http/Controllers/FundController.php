@@ -39,11 +39,7 @@ class FundController extends Controller
         $fund = new Fund();
         $fund->name = $validatedData['name'];
         $user_id = auth()->id();
-        if ($user_id == null) {
-            throw new CustomException(session()->get('user_id'), 400);
-        } else {
-            $fund->user_id = $user_id;
-        }
+        $fund->user_id = $user_id;
         $fund->save();
     
         $monthly = new Monthly();
