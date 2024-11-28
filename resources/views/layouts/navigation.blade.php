@@ -46,6 +46,11 @@
                         {{ __('Test') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('monthlyAuto.index')" :active="request()->routeIs('monthlyAuto.index')">
+                        {{ __('Monthly Auto') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

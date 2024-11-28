@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\MonthlyAuto;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FundController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MonthlyAutoController;
 use App\Http\Controllers\TransactionController;
 
 Route::get('', function () {
@@ -41,5 +43,7 @@ Route::prefix('transaction')->name('transaction.')->middleware(['auth', 'verifie
 Route::resource('transaction', TransactionController::class)->middleware(['auth', 'verified']);
 
 Route::resource('category', CategoryController::class)->middleware(['auth', 'verified']);
+
+Route::resource('monthlyAuto', MonthlyAutoController::class)->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
